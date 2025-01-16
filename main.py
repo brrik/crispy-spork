@@ -1,13 +1,8 @@
 import streamlit as st
 import requests
 import pandas as pd
+from datetime import datetime
 from color import sentiment_color
-# ユーザーID、パスワード、および役職の辞書（役職情報を追加）
-#USER_CREDENTIALS = {
-    #"Tomiyasu": {"password": "First", "role": "部長"},
-    #"Ryo": {"password": "Last", "role": "課長"},
-    #"user3": {"password": "Pass123", "role": "GL"},
-#}
 
 def login():
     st.title("ログイン画面")
@@ -15,9 +10,6 @@ def login():
     # ユーザーIDとパスワードの入力欄
     username = st.text_input("ユーザーID")
     password = st.text_input("パスワード", type="password")
-    
-
-    
 
     # ログインボタン
     if st.button("ログイン"):
@@ -58,169 +50,84 @@ else:
     url = "https://altxfastapi-test.onrender.com/getrolldata/"
     st.title("メインページ")
     columns = ["日時", "役職", "投稿内容", "感情分析", "得点1", "得点2", "得点3", "得点4", "得点5"]
-    # ユーザーの役職によって表示内容を変更
     if st.session_state["role"] == "社長":
-        st.write("社長専用のコンテンツ")
-        res = requests.get(url + "sh")
-        data = res.json()
-        df = pd.DataFrame(data, columns=columns)
-        df = df.drop(df.columns[-5:], axis=1)
-        # ページネーション設定
-        items_per_page = 10
-        total_pages = (len(df) + items_per_page - 1) // items_per_page
-
-        # 現在のページをセッションステートで管理
-        if "current_page" not in st.session_state:
-            st.session_state.current_page = 1
-
-        # 現在のページデータを取得
-        start_index = (st.session_state.current_page - 1) * items_per_page
-        end_index = start_index + items_per_page
-        current_data = df.iloc[start_index:end_index]
-        styler = current_data.style.map(sentiment_color, subset=["感情分析"])
-        # 表示
-        st.write(f"ページ {st.session_state.current_page} / {total_pages}")
-        st.dataframe(styler, use_container_width=True)
-
-        # 前のページボタン
-        col1, col2, col3 = st.columns([1, 2, 1])  # ボタン位置調整
-        if col1.button("前のページ") and st.session_state.current_page > 1:
-            st.session_state.current_page -= 1
-
-        # 次のページボタン
-        if col3.button("次のページ") and st.session_state.current_page < total_pages:
-            st.session_state.current_page += 1
-        #st.write(df)
-        # 社長向けの追加情報やアクション
-
+        url2 = "sh"
     elif st.session_state["role"] == "事業部長":
-        st.write("事業部長専用のコンテンツ")
-        res = requests.get(url + "jb")
-        data = res.json()
-        df = pd.DataFrame(data, columns=columns)
-        df = df.drop(df.columns[-5:], axis=1)
-        # ページネーション設定
-        items_per_page = 10
-        total_pages = (len(df) + items_per_page - 1) // items_per_page
-
-        # 現在のページをセッションステートで管理
-        if "current_page" not in st.session_state:
-            st.session_state.current_page = 1
-
-        # 現在のページデータを取得
-        start_index = (st.session_state.current_page - 1) * items_per_page
-        end_index = start_index + items_per_page
-        current_data = df.iloc[start_index:end_index]
-        styler = current_data.style.map(sentiment_color, subset=["感情分析"])
-        # 表示
-        st.write(f"ページ {st.session_state.current_page} / {total_pages}")
-        st.dataframe(styler, use_container_width=True)
-
-        # 前のページボタン
-        col1, col2, col3 = st.columns([1, 2, 1])  # ボタン位置調整
-        if col1.button("前のページ") and st.session_state.current_page > 1:
-            st.session_state.current_page -= 1
-
-        # 次のページボタン
-        if col3.button("次のページ") and st.session_state.current_page < total_pages:
-            st.session_state.current_page += 1
-        #st.write(df)
-        # 社長向けの追加情報やアクション
-    
+        url2 = "jb"
     elif st.session_state["role"] == "部長":
-        st.write("部長専用のコンテンツ")
-        res = requests.get(url + "bc")
-        data = res.json()
-        df = pd.DataFrame(data, columns=columns)
-        df = df.drop(df.columns[-5:], axis=1)
-        # ページネーション設定
-        items_per_page = 10
-        total_pages = (len(df) + items_per_page - 1) // items_per_page
-
-        # 現在のページをセッションステートで管理
-        if "current_page" not in st.session_state:
-            st.session_state.current_page = 1
-
-        # 現在のページデータを取得
-        start_index = (st.session_state.current_page - 1) * items_per_page
-        end_index = start_index + items_per_page
-        current_data = df.iloc[start_index:end_index]
-        styler = current_data.style.map(sentiment_color, subset=["感情分析"])
-        # 表示
-        st.write(f"ページ {st.session_state.current_page} / {total_pages}")
-        st.dataframe(styler, use_container_width=True)
-
-        # 前のページボタン
-        col1, col2, col3 = st.columns([1, 2, 1])  # ボタン位置調整
-        if col1.button("前のページ") and st.session_state.current_page > 1:
-            st.session_state.current_page -= 1
-
-        # 次のページボタン
-        if col3.button("次のページ") and st.session_state.current_page < total_pages:
-            st.session_state.current_page += 1
-        # 部長向けの追加情報やアクション    
-
+        url2 = "bc"
     elif st.session_state["role"] == "課長":
-        st.write("課長専用のコンテンツ")
-        res = requests.get(url + "kc")
-        data = res.json()
-        df = pd.DataFrame(data, columns=columns)
-        df = df.drop(df.columns[-5:], axis=1)
-        # ページネーション設定
-        items_per_page = 10
-        total_pages = (len(df) + items_per_page - 1) // items_per_page
-
-        # 現在のページをセッションステートで管理
-        if "current_page" not in st.session_state:
-            st.session_state.current_page = 1
-
-        # 現在のページデータを取得
-        start_index = (st.session_state.current_page - 1) * items_per_page
-        end_index = start_index + items_per_page
-        current_data = df.iloc[start_index:end_index]
-        styler = current_data.style.map(sentiment_color, subset=["感情分析"])
-        # 表示
-        st.write(f"ページ {st.session_state.current_page} / {total_pages}")
-        st.dataframe(styler, use_container_width=True)
-
-        # 前のページボタン
-        col1, col2, col3 = st.columns([1, 2, 1])  # ボタン位置調整
-        if col1.button("前のページ") and st.session_state.current_page > 1:
-            st.session_state.current_page -= 1
-
-        # 次のページボタン
-        if col3.button("次のページ") and st.session_state.current_page < total_pages:
-            st.session_state.current_page += 1
-        # 課長向けの追加情報やアクション
+        url2 = "kc"
     elif st.session_state["role"] == "GL":
-        st.write("GL専用のコンテンツ")
-        res = requests.get(url + "gl")
-        data = res.json()
-        df = pd.DataFrame(data, columns=columns)
-        df = df.drop(df.columns[-5:], axis=1)
-        # ページネーション設定
-        items_per_page = 10
-        total_pages = (len(df) + items_per_page - 1) // items_per_page
+        url2 = "gl"
+    # ユーザーの役職によって表示内容を変更
+    yakusyoku = st.session_state["role"]
+    st.write(yakusyoku + "専用のコンテンツ")
+    res = requests.get(url + url2)
+    data = res.json()
+    df = pd.DataFrame(data, columns=columns)
+    df = df.sort_values(by="日時", ascending=False)  # 最新の日付から表示
+    df = df.drop(df.columns[-5:], axis=1)
 
-        # 現在のページをセッションステートで管理
-        if "current_page" not in st.session_state:
-            st.session_state.current_page = 1
+    search_query = st.text_input("検索", "")
 
-        # 現在のページデータを取得
-        start_index = (st.session_state.current_page - 1) * items_per_page
-        end_index = start_index + items_per_page
-        current_data = df.iloc[start_index:end_index]
-        styler = current_data.style.map(sentiment_color, subset=["感情分析"])
-        # 表示
-        st.write(f"ページ {st.session_state.current_page} / {total_pages}")
-        st.dataframe(styler, use_container_width=True)
+    # 検索機能
+    if search_query:
+        df = df[df.apply(lambda row: row.astype(str).str.contains(search_query).any(), axis=1)]
+            
+    # ページネーション設定
+    items_per_page = 10
+    total_pages = (len(df) + items_per_page - 1) // items_per_page
 
-        # 前のページボタン
-        col1, col2, col3 = st.columns([1, 2, 1])  # ボタン位置調整
-        if col1.button("前のページ") and st.session_state.current_page > 1:
-            st.session_state.current_page -= 1
+    # 現在のページをセッションステートで管理
+    if "current_page" not in st.session_state:
+        st.session_state.current_page = 1
 
-        # 次のページボタン
-        if col3.button("次のページ") and st.session_state.current_page < total_pages:
-            st.session_state.current_page += 1
-        # GL向けの追加情報やアクション
+    # 現在のページデータを取得
+    start_index = (st.session_state.current_page - 1) * items_per_page
+    end_index = start_index + items_per_page
+    current_data = df.iloc[start_index:end_index]
+    #styler = current_data.style.map(sentiment_color, subset=["感情分析"])
+    styler = current_data.style.set_table_styles(
+        [
+            {"selector": "td", "props": [("white-space", "normal"), ("word-wrap", "break-word")]},
+            {"selector": "th", "props": [("white-space", "normal"), ("word-wrap", "break-word")]},
+            {"selector": "td:nth-child(4)", "props": [("width", "65%")]}
+        ]
+    ).map(
+        sentiment_color, subset=["感情分析"]
+    )
+    # StreamlitでHTMLとして表示
+    st.markdown(
+        """
+        <style>
+        .dataframe td {
+            vertical-align: top;  /* テキストを上に揃える */
+        }
+        .markdown-text {
+            width: 100%;
+            }
+        </style>
+        """,
+        unsafe_allow_html=True,
+    )
+
+    # 表示
+    st.write(f"ページ {st.session_state.current_page} / {total_pages}")
+    #st.dataframe(styler, use_container_width=True)
+    st.markdown(styler.to_html(),
+                unsafe_allow_html=True
+                )
+
+    # 前のページボタン
+    col1, col2, col3 = st.columns([1, 2, 1])  # ボタン位置調整
+    if col1.button("前のページ") and st.session_state.current_page > 1:
+        st.session_state.current_page -= 1
+
+    # 次のページボタン
+    if col3.button("次のページ") and st.session_state.current_page < total_pages:
+        st.session_state.current_page += 1
+    #st.write(df)
+    # 社長向けの追加情報やアクション
+
+    
