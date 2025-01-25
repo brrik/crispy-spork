@@ -3,7 +3,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 # フォント設定（DejaVu Sansを使用）
-plt.rcParams['font.family'] = 'Ariel'
+plt.rcParams['font.family'] = 'ipaexg.ttf'
 
 def display_graph(data):
     # データフレームに変換
