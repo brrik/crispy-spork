@@ -1,15 +1,24 @@
 import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
-from matplotlib import font_manager
+from matplotlib import font_manager as fm
+import os
 
+# フォントファイルのパスを指定
+font_path = os.path.join(os.path.dirname(__file__), "fonts", "msgothic.ttc")
+
+if os.path.exists(font_path):
+    font_prop = fm.FontProperties(fname=font_path)
+    plt.rcParams['font.family'] = font_prop.get_name()
+else:
+    print("フォントファイルが見つかりません")
 
 def display_graph(data):
     # Windowsの日本語フォントを指定（'msgothic.ttc' など）
     font_path = 'msgothic.ttc'  # Windowsの場合
 
     # フォントプロパティを設定
-    font_prop = font_manager.FontProperties(fname=font_path)
+    font_prop = fm.FontProperties(fname=font_path)
 
     # 日本語フォントをMatplotlibに設定
     plt.rcParams['font.family'] = font_prop.get_name()
@@ -49,11 +58,11 @@ def display_graph(data):
 
 def display_graph_stacked(current_data2):
     # 日本語フォントを指定
-    font_path = 'C:\\Windows\\Fonts\\msgothic.ttc'  # Windowsの場合
+    #font_path = 'C:\\Windows\\Fonts\\msgothic.ttc'  # Windowsの場合
     # LinuxやMacの場合のパスを変更してください
 
     # フォントプロパティを設定
-    font_prop = font_manager.FontProperties(fname=font_path)
+    font_prop = fm.FontProperties(fname=font_path)
     plt.rcParams['font.family'] = font_prop.get_name()
 
     # データの準備
