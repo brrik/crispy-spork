@@ -1,9 +1,13 @@
 import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
+from matplotlib import rcParams
 
+# フォントファイルのパスを指定
+font_path = "assets/fonts/ipaexg.ttf"
+rcParams['font.family'] = font_path
 # フォント設定（DejaVu Sansを使用）
-plt.rcParams['font.family'] = 'ipaexg.ttf'
+#plt.rcParams['font.family'] = 'ipaexg.ttf'
 
 def display_graph(data):
     # データフレームに変換
