@@ -3,11 +3,12 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from matplotlib import rcParams
 from matplotlib import font_manager
+import japanize_matplotlib
 # フォントファイルのパスを指定
 
 # フォント設定（DejaVu Sansを使用）
 #rcParams['font.family'] = 'Meiryo'  # 例: Meiryoフォントを使用
-rcParams['font.family'] = 'Noto Sans JP'
+#rcParams['font.family'] = 'Noto Sans JP'
 def display_graph(data):
     # データフレームに変換
     df = pd.DataFrame(data, columns=["日時", "役職", "投稿内容", "感情", "非常にネガティブ", "ネガティブ", "ニュートラル", "ポジティブ", "非常にポジティブ"])
