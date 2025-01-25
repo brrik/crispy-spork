@@ -6,13 +6,13 @@ from matplotlib import font_manager
 
 def display_graph(data):
     # Windowsの日本語フォントを指定（'msgothic.ttc' など）
-    font_path = 'C:\\Windows\\Fonts\\msgothic.ttc'  # Windowsの場合
+    #font_path = 'C:\\Windows\\Fonts\\msgothic.ttc'  # Windowsの場合
 
     # フォントプロパティを設定
-    font_prop = font_manager.FontProperties(fname=font_path)
+    #font_prop = font_manager.FontProperties(fname=font_path)
 
     # 日本語フォントをMatplotlibに設定
-    plt.rcParams['font.family'] = font_prop.get_name()
+    #plt.rcParams['font.family'] = font_prop.get_name()
 
     # データの準備
 
@@ -37,13 +37,15 @@ def display_graph(data):
     emotion_counts.plot(kind='bar', ax=ax, color=['#ff9999','#66b3ff','#99ff99','#ffcc99','#c2c2f0'])
 
     # グラフのラベルとタイトルを設定（日本語フォントを使用）
-    ax.set_ylabel('投稿件数', fontproperties=font_prop)
-    ax.set_xlabel('感情カテゴリ', fontproperties=font_prop)
-    ax.set_title('各感情カテゴリの投稿件数', fontproperties=font_prop)
-
+    #ax.set_ylabel('投稿件数', fontproperties=font_prop)
+    #ax.set_xlabel('感情カテゴリ', fontproperties=font_prop)
+    #ax.set_title('各感情カテゴリの投稿件数', fontproperties=font_prop)
+    ax.set_ylabel('投稿件数')
+    ax.set_xlabel('感情カテゴリ')
+    ax.set_title('各感情カテゴリの投稿件数')
     # 棒グラフにラベルを追加
-    ax.legend(title="感情カテゴリ", prop=font_prop)
-
+    #ax.legend(title="感情カテゴリ", prop=font_prop)
+    ax.legend(title="感情カテゴリ")
     # Streamlitでグラフを表示
     st.pyplot(fig)
 
