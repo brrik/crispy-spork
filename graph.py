@@ -3,14 +3,10 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from matplotlib import rcParams
 from matplotlib import font_manager
+# フォントファイルのパスを指定
 
-# フォントファイルのパスを指定（プロジェクト内のfonts/フォルダに保存した場合）
-font_path = 'fonts/ipaexg.ttf'
-
-
-# フォント設定
-font_prop = font_manager.FontProperties(fname=font_path)
-rcParams['font.family'] = font_prop.get_name()
+# フォント設定（DejaVu Sansを使用）
+rcParams['font.family'] = 'Meiryo'  # 例: Meiryoフォントを使用
 
 def display_graph(data):
     # データフレームに変換
@@ -30,7 +26,7 @@ def display_graph(data):
     # 投稿件数を棒グラフとして表示
     emotion_counts.plot(kind='bar', ax=ax, color=['#ff9999', '#66b3ff', '#99ff99', '#ffcc99', '#c2c2f0'])
 
-    # グラフのラベルとタイトルを設定
+    # グラフのラベルとタイトルを設定（DejaVu Sansを使用）
     ax.set_ylabel('投稿件数')
     ax.set_xlabel('感情カテゴリ')
     ax.set_title('各感情カテゴリの投稿件数')
@@ -61,7 +57,7 @@ def display_graph_stacked(current_data2):
     # 積み立て棒グラフを作成
     df[emotion_columns].plot(kind='bar', ax=ax, stacked=True, color=['#ff9999', '#66b3ff', '#99ff99', '#ffcc99', '#c2c2f0'])
 
-    # グラフのラベルとタイトルを設定
+    # グラフのラベルとタイトルを設定（DejaVu Sansを使用）
     ax.set_ylabel('感情の割合')
     ax.set_xlabel('投稿')
     ax.set_title('感情分析結果')
