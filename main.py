@@ -3,7 +3,8 @@ import requests
 import pandas as pd
 from datetime import datetime
 from color import sentiment_color
-
+from graph import display_graph
+from graph import display_graph_stacked
 def login():
     st.title("ログイン画面")
 
@@ -49,7 +50,7 @@ else:
 
     url = "https://altxfastapi-test.onrender.com/getrolldata/"
     st.title("メインページ")
-    columns = ["日時", "役職", "投稿内容", "感情分析", "得点1", "得点2", "得点3", "得点4", "得点5"]
+    columns = ["日時", "役職", "投稿内容", "感情", "非常にネガティブ", "ネガティブ", "ニュートラル", "ポジティブ", "非常にポジティブ"]
     if st.session_state["role"] == "社長":
         url2 = "sh"
     elif st.session_state["role"] == "事業部長":
@@ -66,7 +67,9 @@ else:
     res = requests.get(url + url2)
     data = res.json()
     df = pd.DataFrame(data, columns=columns)
+    df2 = pd.DataFrame(data, columns=columns)
     df = df.sort_values(by="日時", ascending=False)  # 最新の日付から表示
+    df2 = df2.sort_values(by="日時", ascending=False)  # 最新の日付から表示
     df = df.drop(df.columns[-5:], axis=1)
 
     search_query = st.text_input("検索", "")
@@ -87,7 +90,7 @@ else:
     start_index = (st.session_state.current_page - 1) * items_per_page
     end_index = start_index + items_per_page
     current_data = df.iloc[start_index:end_index]
-    #styler = current_data.style.map(sentiment_color, subset=["感情分析"])
+    current_data2 = df2.iloc[start_index:end_index]
     styler = current_data.style.set_table_styles(
         [
             {"selector": "td", "props": [("white-space", "normal"), ("word-wrap", "break-word")]},
@@ -95,7 +98,7 @@ else:
             {"selector": "td:nth-child(4)", "props": [("width", "65%")]}
         ]
     ).map(
-        sentiment_color, subset=["感情分析"]
+        sentiment_color, subset=["感情"]
     )
     # StreamlitでHTMLとして表示
     st.markdown(
@@ -115,10 +118,17 @@ else:
     # 表示
     st.write(f"ページ {st.session_state.current_page} / {total_pages}")
     #st.dataframe(styler, use_container_width=True)
+    show_graph = st.checkbox("感情カテゴリの投稿件数を表示")
+    show_graph_stacked = st.checkbox("感情スコアを表示")
+    if show_graph:
+        display_graph(data)
+
+    if show_graph_stacked:
+        display_graph_stacked(current_data2)
+
     st.markdown(styler.to_html(),
                 unsafe_allow_html=True
                 )
-
     # 前のページボタン
     col1, col2, col3 = st.columns([1, 2, 1])  # ボタン位置調整
     if col1.button("前のページ") and st.session_state.current_page > 1:
