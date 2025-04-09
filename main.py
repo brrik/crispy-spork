@@ -14,7 +14,7 @@ def login():
 
     # ログインボタン
     if st.button("ログイン"):
-        url = "https://altxfastapi.onrender.com/login/"
+        url = "https://pythonapi-egwh.onrender.com/login/"
         res = requests.get(url + username + "/" +password)
         data = res.json()
         if data != False:
@@ -48,7 +48,7 @@ else:
     # メインページのコンテンツ
 
 
-    url = "https://altxfastapi.onrender.com/getrolldata/"
+    url = "https://pythonapi-egwh.onrender.com/getrolldata/"
     st.title("メインページ")
     columns = ["日時", "役職", "投稿内容", "感情", "非常にネガティブ", "ネガティブ", "ニュートラル", "ポジティブ", "非常にポジティブ"]
     if st.session_state["role"] == "社長":
