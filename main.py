@@ -5,28 +5,51 @@ from datetime import datetime
 from color import sentiment_color
 from graph import display_graph
 from graph import display_graph_stacked
+
+if not "loading" in st.session_state:
+    st.session_state.loading = False
+
+import streamlit as st
+import requests
+
 def login():
     st.title("ログイン画面")
+
+    # セッションステートに初期値を設定
+    if "loading" not in st.session_state:
+        st.session_state.loading = False
 
     # ユーザーIDとパスワードの入力欄
     username = st.text_input("ユーザーID")
     password = st.text_input("パスワード", type="password")
 
-    # ログインボタン
-    if st.button("ログイン"):
-        url = "https://pythonapi-egwh.onrender.com/login/"
-        res = requests.get(url + username + "/" +password)
-        data = res.json()
-        if data != False:
-            st.session_state["authenticated"] = True
-            st.session_state["username"] = username
-            st.session_state["role"] = data
-            print(data)
-            st.success(f"ログイン成功: ようこそ {username} さん！")
-            st.rerun()
-        else:
-            st.error("ユーザーIDまたはパスワードが間違っています")
+    # ログイン処理関数
+    def do_login():
+        st.session_state.loading = True
+        try:
+            url = "https://pythonapi-egwh.onrender.com/login/"
+            res = requests.get(url + username + "/" + password)
+            data = res.json()
 
+            if data != False:
+                st.session_state["authenticated"] = True
+                st.session_state["username"] = username
+                st.session_state["role"] = data
+                st.success(f"ログイン成功: ようこそ {username} さん！")
+                st.rerun()
+            else:
+                st.error("ユーザーIDまたはパスワードが間違っています")
+        except Exception as e:
+            st.error(f"ログイン中にエラーが発生しました: {e}")
+        finally:
+            st.session_state.loading = False
+
+    # ボタン表示（状態に応じて切り替える）
+    if st.session_state.loading:
+        st.button("ログイン中...", disabled=True)
+    else:
+        if st.button("ログイン"):
+            do_login()
 
 # 認証済みかどうか確認
 if "authenticated" not in st.session_state:
